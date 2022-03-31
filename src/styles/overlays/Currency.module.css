@@ -1,0 +1,90 @@
+.currency {
+  position: relative;
+}
+
+.button {
+  padding: 0.2rem;
+  border: none;
+  border-radius: 0.2rem;
+  background-color: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  user-select: none;
+}
+
+.button.active {
+  background-color: #ececec;
+}
+
+.button:not(.active):hover {
+  background-color: #ececec;
+}
+
+.symbol {
+  padding: 0 0.2rem;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.2rem;
+  color: #1d1f22;
+}
+
+.arrow {
+  display: block;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin: 0;
+  padding: 0 0.2rem;
+  box-sizing: content-box;
+  border-left: 1px solid transparent;
+}
+
+.button.active .arrow {
+  border-left-color: #cacaca;
+}
+
+.button:not(.active):hover .arrow {
+  border-left-color: #cacaca;
+}
+
+.overlay {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, 0.5rem);
+  box-sizing: border-box;
+  background-color: #ffffff;
+  box-shadow: 0 4px 35px #a8acb030;
+  z-index: 1;
+}
+
+.choices {
+  width: max-content;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.choice {
+  padding: 0.75rem;
+  border: none;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.25rem;
+  color: #1d1f22;
+  cursor: pointer;
+}
+
+.choice.selected {
+  background-color: #448aff;
+  color: #ffffff;
+  cursor: default;
+}
+
+.choice:not(.selected):hover {
+  background-color: #ececec;
+}

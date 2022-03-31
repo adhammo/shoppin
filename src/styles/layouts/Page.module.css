@@ -1,0 +1,21 @@
+.page {
+  width: 100%;
+  min-height: 100vh;
+  padding: 0 1rem;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  justify-items: center;
+}
+
+.header {
+  width: 100%;
+  max-width: 1240px;
+  height: 5rem;
+}
+
+.main {
+  width: 100%;
+  max-width: 1240px;
+  height: 100%;
+}

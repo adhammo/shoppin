@@ -1,0 +1,44 @@
+.category {
+  width: 100%;
+  padding: 3rem 0;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 400;
+  font-size: 2.625rem;
+  line-height: 4.25rem;
+  margin: 0 0 3rem 0;
+}
+
+.description {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 500;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  margin: 0;
+}
+
+.products {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr));
+  justify-items: center;
+  gap: 2rem;
+}
+
+@media screen and (max-width: 768px) {
+  .header {
+    align-items: center;
+  }
+
+  .products {
+    grid-template-columns: 1fr;
+  }
+}

@@ -20,6 +20,7 @@ import './App.css'
 import Page from './layouts/Page'
 import CategoryPage from './pages/CategoryPage'
 import ProductPage from './pages/ProductPage'
+import CartPage from 'pages/CartPage'
 import NotFoundPage from './pages/NotFoundPage'
 
 function ScrollToTop() {
@@ -68,6 +69,7 @@ function App() {
           <Route index element={<NotFoundPage />} />
           <Route path="category/:categoryName" element={<CategoryPage />} />
           <Route path="product/:productId" element={<ProductPage />} />
+          <Route path="cart" element={<CartPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

@@ -3,6 +3,8 @@ import { compose } from 'redux'
 import { connect } from 'react-redux'
 
 import route from 'router/route'
+import { resolveStatus } from 'redux/status'
+import { getCurrenciesStatus } from 'redux/reducers/currenciesSlice'
 import { getProduct, getProductsStatus } from 'redux/reducers/productsSlice'
 
 import Product from 'components/product/Product'
@@ -11,14 +13,16 @@ import Error from 'components/status/Error'
 
 class ProductPage extends PureComponent {
   render() {
-    if (this.props.status === 'succeeded') {
-      if (this.props.product) return <Product {...this.props.product} />
-      else return <Error />
-    } else if (this.props.status === 'failed') {
-      return <Error />
-    } else {
-      return <Loading />
-    }
+    return resolveStatus(
+      () => {
+        if (this.props.product) return <Product {...this.props.product} />
+        else return <Error />
+      },
+      () => <Error />,
+      () => <Loading />,
+      this.props.currenciesStatus,
+      this.props.productsStatus
+    )
   }
 }
 
@@ -27,7 +31,8 @@ const mapParamsToProps = params => ({
 })
 
 const mapStateToProps = (state, props) => ({
-  status: getProductsStatus(state),
+  currenciesStatus: getCurrenciesStatus(state),
+  productsStatus: getProductsStatus(state),
   product: getProduct(state, props.id),
 })
 

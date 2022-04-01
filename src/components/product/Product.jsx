@@ -2,12 +2,14 @@ import React, { Component, createRef } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { sanitize } from 'dompurify'
+import classNames from 'classnames'
 
 import { getSelectedCurrency } from 'redux/reducers/currenciesSlice'
+import { productAdded } from 'redux/reducers/cartSlice'
+import { capitalize, firstWordOnly, removeFirstWord } from 'util/stringOps'
 
 import styles from 'styles/product/Product.module.css'
 import Attribute from './Attribute'
-import classNames from 'classnames'
 
 class Product extends Component {
   constructor(props) {
@@ -111,8 +113,8 @@ class Product extends Component {
       this.props.prices.find(
         price => price.currency.label === this.props.currency.label
       ) ?? this.props.prices[0]
-    const title = this.props.name.replace(/ .*/, '')
-    const subTitle = this.props.name.match(/ (.*)/)?.[1]
+    const title = firstWordOnly(this.props.name)
+    const subTitle = removeFirstWord(this.props.name)
     const selectedImage = this.props.gallery[this.state.selectedImage]
     return (
       <div className={styles.product}>
@@ -179,7 +181,7 @@ class Product extends Component {
         <div className={styles.head}>
           <div className={styles.tags}>
             <span className={styles.tag}>
-              {this.props.category.replace(/^\w/, c => c.toUpperCase())}
+              {capitalize(this.props.category)}
             </span>
             <span className={styles.tag}>{this.props.brand}</span>
           </div>
@@ -208,6 +210,10 @@ class Product extends Component {
             className={classNames(styles.submit, {
               [styles.outStock]: !this.props.inStock,
             })}
+            onClick={e => {
+              e.preventDefault()
+              this.props.addProduct(this.props.id, this.state.attributes)
+            }}
             disabled={!this.props.inStock}
           >
             {this.props.inStock ? 'ADD TO CART' : 'OUT OF STOCK'}
@@ -228,6 +234,10 @@ const mapStateToProps = state => ({
   currency: getSelectedCurrency(state),
 })
 
+const mapDispatchToProps = dispatch => ({
+  addProduct: (id, attributes) => dispatch(productAdded({ id, attributes })),
+})
+
 Product.propTypes = {
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
@@ -239,4 +249,4 @@ Product.propTypes = {
   category: PropTypes.string.isRequired,
 }
 
-export default connect(mapStateToProps)(Product)
+export default connect(mapStateToProps, mapDispatchToProps)(Product)

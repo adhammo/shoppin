@@ -2,7 +2,8 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import { getProduct, getProductsStatus } from 'redux/reducers/productsSlice'
+import { getProduct } from 'redux/reducers/productsSlice'
+import { capitalize } from 'util/stringOps'
 
 import styles from 'styles/category/Category.module.css'
 import ProductCard from 'components/product/ProductCard.jsx'
@@ -12,15 +13,12 @@ class Category extends PureComponent {
     return (
       <div className={styles.category}>
         <header className={styles.header}>
-          <h1 className={styles.title}>
-            {this.props.name.replace(/^\w/, c => c.toUpperCase())}
-          </h1>
+          <h1 className={styles.title}>{capitalize(this.props.name)}</h1>
         </header>
         <section className={styles.products}>
-          {this.props.status === 'succeeded' &&
-            this.props.products.map(product => (
-              <ProductCard key={product.id} {...product} />
-            ))}
+          {this.props.products.map(product => (
+            <ProductCard key={product.id} {...product} />
+          ))}
         </section>
       </div>
     )
@@ -28,7 +26,6 @@ class Category extends PureComponent {
 }
 
 const mapStateToProps = (state, props) => ({
-  status: getProductsStatus(state),
   products: props.productsIds.map(productId => getProduct(state, productId)),
 })
 

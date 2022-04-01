@@ -8,7 +8,7 @@ class Logo extends PureComponent {
   render() {
     return (
       <div className={styles.logo}>
-        <Link className={styles.link} to="/" title="Logo">
+        <Link className={styles.link} to="/cart" title="Logo">
           <img className={styles.icon} src={LogoIcon} alt="Logo Icon" />
         </Link>
       </div>

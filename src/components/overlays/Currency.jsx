@@ -2,6 +2,7 @@ import React, { Component, createRef } from 'react'
 import { connect } from 'react-redux'
 import classNames from 'classnames'
 
+import { hasFailed } from 'redux/status'
 import {
   currencySelected,
   getCurrenciesStatus,
@@ -54,7 +55,7 @@ class Currency extends Component {
   }
 
   render() {
-    if (this.props.status !== 'succeeded') return <div></div>
+    if (hasFailed(this.props.status)) return <div></div>
     return (
       <div className={styles.currency}>
         <button

@@ -241,12 +241,11 @@
 @media screen and (max-width: 1024px) {
   .product {
     grid-template-columns: 1fr 20rem;
-    grid-template-rows: auto auto auto 1fr;
+    grid-template-rows: auto auto 1fr;
     grid-template-areas:
       'image head'
       'image content'
-      'gallery content'
-      'empty content';
+      'gallery content';
   }
 
   .galleryContainer {

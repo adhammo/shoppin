@@ -3,10 +3,13 @@ import { compose } from 'redux'
 import { connect } from 'react-redux'
 
 import route from 'router/route'
+import { resolveStatus } from 'redux/status'
+import { getCurrenciesStatus } from 'redux/reducers/currenciesSlice'
 import {
   getCategoriesStatus,
   getCategory,
 } from 'redux/reducers/categoriesSlice'
+import { getProductsStatus } from 'redux/reducers/productsSlice'
 
 import Category from 'components/category/Category'
 import Loading from 'components/status/Loading'
@@ -14,14 +17,17 @@ import Error from 'components/status/Error'
 
 class CategoryPage extends PureComponent {
   render() {
-    if (this.props.status === 'succeeded') {
-      if (this.props.category) return <Category {...this.props.category} />
-      else return <Error />
-    } else if (this.props.status === 'failed') {
-      return <Error />
-    } else {
-      return <Loading />
-    }
+    return resolveStatus(
+      () => {
+        if (this.props.category) return <Category {...this.props.category} />
+        else return <Error />
+      },
+      () => <Error />,
+      () => <Loading />,
+      this.props.currenciesStatus,
+      this.props.categoriesStatus,
+      this.props.productsStatus
+    )
   }
 }
 
@@ -30,7 +36,9 @@ const mapParamsToProps = params => ({
 })
 
 const mapStateToProps = (state, props) => ({
-  status: getCategoriesStatus(state),
+  currenciesStatus: getCurrenciesStatus(state),
+  categoriesStatus: getCategoriesStatus(state),
+  productsStatus: getProductsStatus(state),
   category: getCategory(state, props.name),
 })
 

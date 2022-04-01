@@ -1,18 +1,20 @@
-import classNames from 'classnames'
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
+import classNames from 'classnames'
 
+import { hasFailed } from 'redux/status'
 import {
   getCategoriesStatus,
   getAllCategories,
 } from 'redux/reducers/categoriesSlice'
+import { capitalize } from 'util/stringOps'
 
 import styles from 'styles/header/Navigation.module.css'
 
 class Navigation extends PureComponent {
   render() {
-    if (this.props.status !== 'succeeded') return <nav></nav>
+    if (hasFailed(this.props.status)) return <nav></nav>
     return (
       <nav className={styles.nav}>
         <ul className={styles.list}>
@@ -24,7 +26,7 @@ class Navigation extends PureComponent {
                 }
                 to={`/category/${category.name}`}
               >
-                {category.name.replace(/^\w/, c => c.toUpperCase())}
+                {capitalize(category.name)}
               </NavLink>
             </li>
           ))}

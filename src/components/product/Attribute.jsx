@@ -12,6 +12,7 @@ class Attribute extends PureComponent {
           <Text
             items={this.props.items}
             selected={this.props.selected}
+            reactive={this.props.reactive}
             selectItem={this.props.selectItem}
           />
         )
@@ -20,6 +21,7 @@ class Attribute extends PureComponent {
           <Swatch
             items={this.props.items}
             selected={this.props.selected}
+            reactive={this.props.reactive}
             selectItem={this.props.selectItem}
           />
         )
@@ -33,7 +35,16 @@ Attribute.propTypes = {
   type: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
   selected: PropTypes.string.isRequired,
-  selectItem: PropTypes.func.isRequired,
+  reactive: PropTypes.bool.isRequired,
+  selectItem: function (props, propName) {
+    if (props.reactive && typeof props[propName] !== 'function') {
+      return new Error('Please provide a selectItem function!')
+    }
+  },
+}
+
+Attribute.defaultProps = {
+  reactive: false,
 }
 
 export default Attribute

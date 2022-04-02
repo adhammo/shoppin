@@ -17,6 +17,13 @@
   margin: 0 0 3rem 0;
 }
 
+.cartProducts {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
 /* .products {
   width: 100%;
   display: grid;

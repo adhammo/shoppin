@@ -47,8 +47,9 @@ class ProductCard extends PureComponent {
         </section>
         <footer className={styles.content}>
           <div className={styles.head}>
-            <h3 className={styles.title}>{this.props.name}</h3>
-            <span className={styles.brand}>{this.props.brand}</span>
+            <h3 className={styles.title}>
+              {`${this.props.brand} ${this.props.name}`}
+            </h3>
           </div>
           <span className={styles.price}>
             {`${price.currency.symbol}${price.amount}`}

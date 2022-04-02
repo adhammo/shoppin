@@ -10,13 +10,13 @@
   border: 2px solid #a6a6a6;
   border-radius: 2px;
   box-sizing: border-box;
-  cursor: pointer;
   opacity: 0.5;
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: 400;
   font-size: 0.8rem;
   line-height: 1.125rem;
   color: #292929;
+  text-align: center;
 }
 
 .value.dark {
@@ -26,16 +26,17 @@
 .value.selected {
   border: 2px solid transparent;
   outline: 2px solid #1d1f22;
-  cursor: default;
   opacity: 1;
 }
 
-.value:not(.selected):hover {
-  opacity: 0.8;
+.reactive {
+  cursor: pointer;
 }
 
-@media screen and (max-width: 768px) {
-  .swatch {
-    grid-template-columns: repeat(auto-fill, 4rem);
-  }
+.reactive.selected {
+  cursor: default;
+}
+
+.reactive:not(.selected):hover {
+  opacity: 0.8;
 }

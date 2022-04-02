@@ -1,13 +1,13 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
-import classNames from 'classnames'
+// import classNames from 'classnames'
 
 import { getSelectedCurrency } from 'redux/reducers/currenciesSlice'
+import { capitalize } from 'util/stringOps'
 
-import styles from 'styles/product/ProductCard.module.css'
-import CartIcon from 'icons/cart-light.svg'
+import styles from 'styles/product/CartProduct.module.css'
+import Attribute from './Attribute'
 
 class CartProduct extends PureComponent {
   render() {
@@ -15,46 +15,46 @@ class CartProduct extends PureComponent {
       this.props.prices.find(
         price => price.currency.label === this.props.currency.label
       ) ?? this.props.prices[0]
-    const selected = !this.props.inStock
     return (
-      <Link
-        className={classNames(styles.productCard, {
-          [styles.selected]: selected,
-        })}
-        to={`/product/${this.props.id}`}
-      >
-        <section
-          className={styles.imageContainer}
-          title={this.props.name.concat(
-            !this.props.inStock ? ' - Out of stock' : ''
-          )}
-        >
+      <div className={styles.cartProduct}>
+        <div className={styles.head}>
+          <div className={styles.tags}>
+            <span className={styles.tag}>
+              {capitalize(this.props.category)}
+            </span>
+          </div>
+          <h1 className={styles.brand}>{this.props.brand}</h1>
+          <h2 className={styles.name}>{this.props.name}</h2>
+          <span className={styles.price}>
+            {`${price.currency.symbol}${price.amount}`}
+          </span>
+        </div>
+        <section className={styles.attributes}>
+          {this.props.attributes.map(attribute => (
+            <>
+              <span
+                key={`${attribute.id}_title`}
+                className={styles.attributeTitle}
+              >
+                {`${attribute.name.toUpperCase()}:`}
+              </span>
+              <Attribute
+                key={`${attribute.id}_attribute`}
+                type={attribute.type}
+                items={attribute.items}
+                selected={this.props.option[attribute.id]}
+              />
+            </>
+          ))}
+        </section>
+        <section className={styles.imageContainer} title={this.props.name}>
           <img
             className={styles.image}
             src={this.props.gallery[0]}
             alt={this.props.name}
           />
-          {!this.props.inStock && (
-            <div className={styles.outStockContainer}>
-              <span className={styles.outStock}>OUT OF STOCK</span>
-            </div>
-          )}
-          {selected && (
-            <div className={styles.cartIcon} title="Check cart">
-              <img className={styles.icon} src={CartIcon} alt="Cart Icon" />
-            </div>
-          )}
         </section>
-        <footer className={styles.content}>
-          <div className={styles.head}>
-            <h3 className={styles.title}>{this.props.name}</h3>
-            <span className={styles.brand}>{this.props.brand}</span>
-          </div>
-          <span className={styles.price}>
-            {`${price.currency.symbol}${price.amount}`}
-          </span>
-        </footer>
-      </Link>
+      </div>
     )
   }
 }
@@ -66,10 +66,10 @@ const mapStateToProps = state => ({
 CartProduct.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  inStock: PropTypes.bool.isRequired,
   gallery: PropTypes.array.isRequired,
   brand: PropTypes.string.isRequired,
   prices: PropTypes.array.isRequired,
+  option: PropTypes.object.isRequired,
 }
 
 export default connect(mapStateToProps)(CartProduct)

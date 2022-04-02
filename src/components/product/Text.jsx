@@ -6,7 +6,9 @@ import styles from 'styles/product/Text.module.css'
 
 class Text extends PureComponent {
   componentDidMount() {
-    if (this.props.items[0]) this.selectItem(this.props.items[0])
+    if (this.props.reactive && this.props.items[0]) {
+      this.selectItem(this.props.items[0])
+    }
   }
 
   isItemSelected = item => {
@@ -14,31 +16,46 @@ class Text extends PureComponent {
   }
 
   selectItem = item => {
-    this.props.selectItem(item.id)
+    if (this.props.reactive) this.props.selectItem(item.id)
   }
 
   render() {
     return (
       <div className={styles.text}>
-        {this.props.items.map(item => {
-          const selected = this.isItemSelected(item)
-          return (
-            <button
-              key={item.id}
-              title={item.displayValue}
-              className={classNames(styles.value, {
-                [styles.selected]: selected,
-              })}
-              onClick={e => {
-                e.preventDefault()
-                this.selectItem(item)
-              }}
-              disabled={selected}
-            >
-              {item.value}
-            </button>
-          )
-        })}
+        {this.props.reactive
+          ? this.props.items.map(item => {
+              const selected = this.isItemSelected(item)
+              return (
+                <button
+                  key={item.id}
+                  title={item.displayValue}
+                  className={classNames(styles.value, styles.reactive, {
+                    [styles.selected]: selected,
+                  })}
+                  onClick={e => {
+                    e.preventDefault()
+                    this.selectItem(item)
+                  }}
+                  disabled={selected}
+                >
+                  {item.value}
+                </button>
+              )
+            })
+          : this.props.items.map(item => {
+              const selected = this.isItemSelected(item)
+              return (
+                <div
+                  key={item.id}
+                  title={item.displayValue}
+                  className={classNames(styles.value, {
+                    [styles.selected]: selected,
+                  })}
+                >
+                  {item.value}
+                </div>
+              )
+            })}
       </div>
     )
   }
@@ -47,7 +64,8 @@ class Text extends PureComponent {
 Text.propTypes = {
   items: PropTypes.array.isRequired,
   selected: PropTypes.string.isRequired,
-  selectItem: PropTypes.func.isRequired,
+  reactive: PropTypes.bool.isRequired,
+  selectItem: PropTypes.func,
 }
 
 export default Text

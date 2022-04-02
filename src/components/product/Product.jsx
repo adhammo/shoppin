@@ -6,7 +6,7 @@ import classNames from 'classnames'
 
 import { getSelectedCurrency } from 'redux/reducers/currenciesSlice'
 import { productAdded } from 'redux/reducers/cartSlice'
-import { capitalize, firstWordOnly, removeFirstWord } from 'util/stringOps'
+import { capitalize } from 'util/stringOps'
 
 import styles from 'styles/product/Product.module.css'
 import Attribute from './Attribute'
@@ -113,8 +113,6 @@ class Product extends Component {
       this.props.prices.find(
         price => price.currency.label === this.props.currency.label
       ) ?? this.props.prices[0]
-    const title = firstWordOnly(this.props.name)
-    const subTitle = removeFirstWord(this.props.name)
     const selectedImage = this.props.gallery[this.state.selectedImage]
     return (
       <div className={styles.product}>
@@ -183,19 +181,21 @@ class Product extends Component {
             <span className={styles.tag}>
               {capitalize(this.props.category)}
             </span>
-            <span className={styles.tag}>{this.props.brand}</span>
           </div>
-          <h1 className={styles.title}>{title}</h1>
-          {subTitle && <h2 className={styles.subTitle}>{subTitle}</h2>}
+          <h1 className={styles.brand}>{this.props.brand}</h1>
+          <h2 className={styles.name}>{this.props.name}</h2>
         </div>
         <section className={styles.content}>
           {this.props.attributes.map(attribute => (
             <div key={attribute.id} className={styles.attribute}>
-              <span className={styles.attributeTitle}>{attribute.name}</span>
+              <span
+                className={styles.attributeTitle}
+              >{`${attribute.name.toUpperCase()}:`}</span>
               <Attribute
                 type={attribute.type}
                 items={attribute.items}
                 selected={this.getAttributeSelected(attribute.id)}
+                reactive
                 selectItem={this.getAttributeSelectItem(attribute.id)}
               />
             </div>

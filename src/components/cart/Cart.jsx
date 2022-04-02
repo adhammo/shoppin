@@ -14,7 +14,7 @@ class Cart extends PureComponent {
         <header className={styles.header}>
           <h1 className={styles.title}>CART</h1>
         </header>
-        <section className={styles.products}>
+        <section className={styles.cartProducts}>
           {this.props.cartProducts.map(cartProduct => {
             const product = this.props.products[cartProduct.id]
             return cartProduct.options.map((option, index) => (

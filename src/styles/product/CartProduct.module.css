@@ -1,88 +1,19 @@
 .cartProduct {
   width: 100%;
-  min-height: 13rem;
   border-top: 1px solid #e5e5e5;
   padding: 1rem 0;
   box-sizing: content-box;
   display: grid;
-  grid-template-columns: 1fr 20rem;
+  grid-template-columns: 1fr auto 15rem auto;
   grid-template-rows: auto 1fr;
   grid-template-areas:
-    'head image'
-    'content image';
-  gap: 1.5rem;
+    'head option gallery delete'
+    'content option gallery delete';
+  gap: 1rem;
 }
 
 .cartProduct:last-child {
   border-bottom: 1px solid #e5e5e5;
-}
-
-.galleryContainer {
-  position: relative;
-  width: 7rem;
-  height: 27rem;
-  display: flex;
-  align-items: flex-end;
-  overflow: hidden;
-  scroll-behavior: smooth;
-  grid-area: gallery;
-}
-
-.gallery {
-  margin: auto 0 auto auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-
-.gallery > * {
-  flex-shrink: 0;
-  margin-bottom: 1rem;
-}
-
-.gallery > :last-child {
-  margin-bottom: 0;
-}
-
-.galleryImage {
-  position: relative;
-  width: 6rem;
-  height: 6rem;
-  padding: 0;
-  border: none;
-  background-color: #ffffff;
-  border-radius: 0;
-  cursor: pointer;
-  opacity: 0.5;
-  user-select: none;
-}
-
-.galleryImage.selected {
-  cursor: default;
-  opacity: 1;
-}
-
-.galleryImage:not(.selected):hover {
-  opacity: 0.8;
-}
-
-.imageContainer {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  grid-area: image;
-}
-
-.image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  max-width: 100%;
-  max-height: 100%;
-  margin: auto;
-  object-fit: contain;
 }
 
 .head {
@@ -136,24 +67,134 @@
   color: #1d1f22;
 }
 
-.price {
+.gallery {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  grid-area: gallery;
+}
+
+.navButton {
+  width: 2rem;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  border-radius: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.navButton.disabled {
+  cursor: default;
+  opacity: 0;
+}
+
+.navButton:not(.disabled):hover {
+  background-color: #ececec;
+}
+
+.arrow {
+  display: block;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin: 0;
+}
+
+.next .arrow {
+  transform: rotate(-90deg);
+}
+
+.prev .arrow {
+  transform: rotate(90deg);
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-width: 100%;
+  max-height: 100%;
+  margin: auto;
+  object-fit: contain;
+}
+
+.option {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  grid-area: option;
+}
+
+.optionButton {
+  padding: 0.5rem;
+  border: 1px solid #1d1f22;
+  background-color: transparent;
+  border-radius: 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+.optionButton.disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.optionButton:not(.disabled):hover {
+  background-color: #ececec;
+}
+
+.plus,
+.minus {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  margin: 0;
+}
+
+.count {
   font-family: 'Raleway', sans-serif;
-  font-weight: 700;
+  font-weight: 500;
   font-size: 1.5rem;
   line-height: 1.75rem;
-  margin: 0;
-  margin-top: 1rem;
+  margin: 2rem 0;
   color: #1d1f22;
+  text-align: center;
 }
 
 .attributes {
   width: 100%;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  align-self: flex-end;
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
   grid-area: content;
+}
+
+.attributes > * {
+  margin-bottom: 1rem;
+}
+
+.attributes > :last-child {
+  margin-bottom: 0;
+}
+
+.attribute {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .attributeTitle {
@@ -162,5 +203,63 @@
   font-size: 1rem;
   line-height: 1rem;
   margin: 0;
+  margin-bottom: 1rem;
   color: #1d1f22;
+}
+
+.price {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1.75rem;
+  margin: 0;
+  color: #1d1f22;
+}
+
+.deleteButton {
+  align-self: flex-start;
+  padding: 0.5rem;
+  border: none;
+  background-color: transparent;
+  border-radius: 0;
+  cursor: pointer;
+  display: flex;
+  user-select: none;
+  grid-area: delete;
+}
+
+.delete {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  margin: 0;
+}
+
+.deleteButton:hover .delete {
+  fill: #f04242;
+}
+
+@media screen and (max-width: 768px) {
+  .cartProduct {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      'head delete'
+      'gallery gallery'
+      'option option'
+      'content content';
+  }
+
+  .imageContainer {
+    width: 15rem;
+    height: 15rem;
+  }
+
+  .option {
+    flex-direction: row;
+  }
+
+  .count {
+    min-width: 4rem;
+    margin: 0 2rem;
+  }
 }

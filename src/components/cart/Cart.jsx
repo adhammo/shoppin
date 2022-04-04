@@ -22,6 +22,7 @@ class Cart extends PureComponent {
                 key={`${cartProduct.id}_${index}`}
                 {...product}
                 option={option}
+                optionIndex={index}
               />
             ))
           })}

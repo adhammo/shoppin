@@ -41,6 +41,7 @@
 }
 
 .button.active .arrow {
+  transform: rotate(180deg);
   border-left-color: #cacaca;
 }
 

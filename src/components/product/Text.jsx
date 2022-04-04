@@ -30,6 +30,7 @@ class Text extends PureComponent {
                   key={item.id}
                   title={item.displayValue}
                   className={classNames(styles.value, styles.reactive, {
+                    [styles.small]: this.props.small,
                     [styles.selected]: selected,
                   })}
                   onClick={e => {
@@ -49,6 +50,7 @@ class Text extends PureComponent {
                   key={item.id}
                   title={item.displayValue}
                   className={classNames(styles.value, {
+                    [styles.small]: this.props.small,
                     [styles.selected]: selected,
                   })}
                 >
@@ -62,10 +64,15 @@ class Text extends PureComponent {
 }
 
 Text.propTypes = {
+  small: PropTypes.bool.isRequired,
   items: PropTypes.array.isRequired,
   selected: PropTypes.string.isRequired,
   reactive: PropTypes.bool.isRequired,
-  selectItem: PropTypes.func,
+  selectItem: function (props, propName) {
+    if (props.reactive && typeof props[propName] !== 'function') {
+      return new Error('Please provide a selectItem function!')
+    }
+  },
 }
 
 export default Text

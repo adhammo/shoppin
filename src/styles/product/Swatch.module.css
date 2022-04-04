@@ -1,6 +1,6 @@
 .swatch {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(4rem, 1fr));
+  grid-template-columns: repeat(auto-fill, 4rem);
   gap: 1rem;
 }
 
@@ -17,6 +17,10 @@
   line-height: 1.125rem;
   color: #292929;
   text-align: center;
+}
+
+.value.small {
+  padding: 0.2rem;
 }
 
 .value.dark {

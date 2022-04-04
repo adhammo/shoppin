@@ -116,6 +116,15 @@ class Product extends Component {
     const selectedImage = this.props.gallery[this.state.selectedImage]
     return (
       <div className={styles.product}>
+        <header className={styles.head}>
+          <div className={styles.tags}>
+            <span className={styles.tag}>
+              {capitalize(this.props.category)}
+            </span>
+          </div>
+          <h1 className={styles.brand}>{this.props.brand}</h1>
+          <h2 className={styles.name}>{this.props.name}</h2>
+        </header>
         <aside
           ref={this.galleryContainerRef}
           className={styles.galleryContainer}
@@ -176,35 +185,29 @@ class Product extends Component {
             alt={this.props.name}
           />
         </section>
-        <div className={styles.head}>
-          <div className={styles.tags}>
-            <span className={styles.tag}>
-              {capitalize(this.props.category)}
-            </span>
-          </div>
-          <h1 className={styles.brand}>{this.props.brand}</h1>
-          <h2 className={styles.name}>{this.props.name}</h2>
-        </div>
+
         <section className={styles.content}>
-          {this.props.attributes.map(attribute => (
-            <div key={attribute.id} className={styles.attribute}>
-              <span
-                className={styles.attributeTitle}
-              >{`${attribute.name.toUpperCase()}:`}</span>
-              <Attribute
-                type={attribute.type}
-                items={attribute.items}
-                selected={this.getAttributeSelected(attribute.id)}
-                reactive
-                selectItem={this.getAttributeSelectItem(attribute.id)}
-              />
+          <div className={styles.attributes}>
+            {this.props.attributes.map(attribute => (
+              <div key={attribute.id} className={styles.attribute}>
+                <span
+                  className={styles.attributeTitle}
+                >{`${attribute.name.toUpperCase()}:`}</span>
+                <Attribute
+                  type={attribute.type}
+                  items={attribute.items}
+                  selected={this.getAttributeSelected(attribute.id)}
+                  reactive
+                  selectItem={this.getAttributeSelectItem(attribute.id)}
+                />
+              </div>
+            ))}
+            <div className={styles.attribute}>
+              <span className={styles.attributeTitle}>PRICE:</span>
+              <span className={styles.price}>
+                {`${price.currency.symbol}${Math.round(price.amount * 100) / 100}`}
+              </span>
             </div>
-          ))}
-          <div className={styles.attribute}>
-            <span className={styles.attributeTitle}>PRICE:</span>
-            <span className={styles.price}>
-              {`${price.currency.symbol}${price.amount}`}
-            </span>
           </div>
           <button
             className={classNames(styles.submit, {

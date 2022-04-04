@@ -52,7 +52,7 @@ class ProductCard extends PureComponent {
             </h3>
           </div>
           <span className={styles.price}>
-            {`${price.currency.symbol}${price.amount}`}
+            {`${price.currency.symbol}${Math.round(price.amount * 100) / 100}`}
           </span>
         </footer>
       </Link>

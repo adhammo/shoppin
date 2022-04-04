@@ -16,36 +16,37 @@ const cartSlice = createSlice({
       const { id, attributes } = action.payload
       const newOption = {
         ...attributes,
-        amount: 1,
+        count: 1,
       }
       if (state.products[id]) {
         const index = state.products[id].findIndex(option =>
           isExactOption(option, attributes)
         )
-        if (index !== -1) state.products[id][index].amount++
+        if (index !== -1) state.products[id][index].count++
         else state.products[id] = state.products[id].concat(newOption)
       } else state.products[id] = [newOption]
+    },
+    productChanged(state, action) {
+      const { id, index, count } = action.payload
+      const option = state.products[id]?.[index]
+      if (option) {
+        state.products[id][index].count = Math.max(0, option.count + count)
+      }
+    },
+    productRemoved(state, action) {
+      const { id, index } = action.payload
+      const option = state.products[id]?.[index]
+      if (option) {
+        if (Object.keys(state.products[id]).length === 1) {
+          delete state.products[id]
+        } else state.products[id].splice(index, 1)
+      }
     },
   },
 })
 
-// const cart = {
-//   'huarache-x-stussy-le': [
-//     {
-//       Size: '40',
-//       amount: 1,
-//     },
-//   ],
-// }
-
-// const product = {
-//   id: 'huarache-x-stussy-le',
-//   attributes: {
-//     Size: '40',
-//   },
-// }
-
-export const { productAdded } = cartSlice.actions
+export const { productAdded, productChanged, productRemoved } =
+  cartSlice.actions
 
 export default cartSlice.reducer
 
@@ -55,7 +56,3 @@ export const getCartProducts = state => {
     options,
   }))
 }
-
-// export const getProduct = (state, productId) => {
-//   return state.products.data.find(product => product.id === productId)
-// }

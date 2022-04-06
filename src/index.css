@@ -2,6 +2,7 @@
 html {
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
   box-sizing: border-box;
   overflow-y: auto;
 }
@@ -20,10 +21,6 @@ body {
 a {
   background-color: transparent;
   -webkit-text-decoration-skip: objects;
-}
-a:active,
-a:hover {
-  /* outline-width: 0; */
 }
 abbr[title] {
   border-bottom-width: 1px;

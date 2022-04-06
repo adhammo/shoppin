@@ -1,12 +1,17 @@
 import React, { forwardRef } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 
 function route(mapParamsToProps) {
   return function (Component) {
     const RoutedComponent = (props, ref) => {
       const params = useParams()
+      const path = useLocation()
       return (
-        <Component {...props} {...mapParamsToProps(params, props)} ref={ref} />
+        <Component
+          {...props}
+          {...mapParamsToProps(params, path, props)}
+          ref={ref}
+        />
       )
     }
     const componentName = Component.displayName || Component.name || 'Component'

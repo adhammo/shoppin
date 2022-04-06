@@ -96,6 +96,7 @@ class CartOverlay extends PureComponent {
           title="Cart"
         >
           <img className={styles.cartIcon} src={CartIcon} alt="Cart Icon" />
+          {count > 0 && <span className={styles.buttonCount}>{count}</span>}
         </button>
         {this.props.overlayVisible && (
           <div ref={this.overlayRef} className={styles.overlay}>

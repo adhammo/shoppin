@@ -257,6 +257,18 @@
     flex-direction: row;
   }
 
+  .add {
+    order: 3;
+  }
+
+  .count {
+    order: 2;
+  }
+
+  .sub {
+    order: 1;
+  }
+
   .count {
     min-width: 4rem;
     margin: 0 2rem;

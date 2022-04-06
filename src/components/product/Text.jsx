@@ -21,7 +21,12 @@ class Text extends PureComponent {
 
   render() {
     return (
-      <div className={styles.text}>
+      <div
+        className={classNames(styles.text, {
+          [styles.tiny]: this.props.tiny,
+          [styles.small]: this.props.small,
+        })}
+      >
         {this.props.reactive
           ? this.props.items.map(item => {
               const selected = this.isItemSelected(item)
@@ -30,7 +35,6 @@ class Text extends PureComponent {
                   key={item.id}
                   title={item.displayValue}
                   className={classNames(styles.value, styles.reactive, {
-                    [styles.small]: this.props.small,
                     [styles.selected]: selected,
                   })}
                   onClick={e => {
@@ -50,7 +54,6 @@ class Text extends PureComponent {
                   key={item.id}
                   title={item.displayValue}
                   className={classNames(styles.value, {
-                    [styles.small]: this.props.small,
                     [styles.selected]: selected,
                   })}
                 >

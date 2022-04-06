@@ -109,10 +109,9 @@ class Product extends Component {
   }
 
   render() {
-    const price =
-      this.props.prices.find(
-        price => price.currency.label === this.props.currency.label
-      ) ?? this.props.prices[0]
+    const price = this.props.prices.find(
+      price => price.currency.label === this.props.currency.label
+    )
     const selectedImage = this.props.gallery[this.state.selectedImage]
     return (
       <div className={styles.product}>
@@ -185,7 +184,6 @@ class Product extends Component {
             alt={this.props.name}
           />
         </section>
-
         <section className={styles.content}>
           <div className={styles.attributes}>
             {this.props.attributes.map(attribute => (
@@ -205,7 +203,9 @@ class Product extends Component {
             <div className={styles.attribute}>
               <span className={styles.attributeTitle}>PRICE:</span>
               <span className={styles.price}>
-                {`${price.currency.symbol}${Math.round(price.amount * 100) / 100}`}
+                {`${price.currency.symbol}${
+                  Math.round(price.amount * 100) / 100
+                }`}
               </span>
             </div>
           </div>

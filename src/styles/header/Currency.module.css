@@ -14,11 +14,11 @@
 }
 
 .button.active {
-  background-color: #ececec;
+  background-color: #f0f0f0;
 }
 
 .button:not(.active):hover {
-  background-color: #ececec;
+  background-color: #f0f0f0;
 }
 
 .symbol {
@@ -41,7 +41,7 @@
 }
 
 .button.active .arrow {
-  transform: rotate(180deg);
+  transform: scale(1, -1);
   border-left-color: #cacaca;
 }
 
@@ -57,7 +57,7 @@
   box-sizing: border-box;
   background-color: #ffffff;
   box-shadow: 0 4px 35px #a8acb030;
-  z-index: 1;
+  z-index: 3;
 }
 
 .choices {
@@ -87,5 +87,5 @@
 }
 
 .choice:not(.selected):hover {
-  background-color: #ececec;
+  background-color: #f0f0f0;
 }

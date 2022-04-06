@@ -1,0 +1,175 @@
+.cart {
+  position: relative;
+}
+
+.button {
+  padding: 0.2rem;
+  border: none;
+  border-radius: 0.2rem;
+  background-color: transparent;
+  cursor: pointer;
+  user-select: none;
+}
+
+.button.active {
+  background-color: #f0f0f0;
+}
+
+.button:not(.active):hover {
+  background-color: #f0f0f0;
+}
+
+.cartIcon {
+  display: block;
+  width: 1.2rem;
+  height: 1.2rem;
+  margin: 0;
+}
+
+.overlay {
+  position: absolute;
+  top: 50%;
+  right: 0rem;
+  width: 20rem;
+  height: 30rem;
+  transform: translate(0, 2.5rem);
+  padding: 1rem;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  z-index: 3;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 1rem;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.25rem;
+  margin: 0;
+  color: #1d1f22;
+}
+
+.count {
+  font-weight: 500;
+}
+
+.cartProducts {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: flex-start;
+  align-items: stretch;
+  gap: 2rem;
+  overflow-y: auto;
+}
+
+.empty {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.25rem;
+  margin: 0;
+  color: #1d1f22;
+}
+
+.footer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.footer > * {
+  margin-bottom: 1rem;
+}
+
+.footer > :last-child {
+  margin-bottom: 0;
+}
+
+.totalContainer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.totalHeader {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.25rem;
+  margin: 0;
+  color: #1d1f22;
+}
+
+.total {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.25rem;
+  margin: 0;
+  color: #1d1f22;
+}
+
+.buttons {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: stretch;
+}
+
+.buttons > * {
+  margin-right: 0.5rem;
+}
+
+.buttons > :last-child {
+  margin-right: 0;
+}
+
+.bag {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid #1d1f22;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1rem;
+  color: #1d1f22;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+}
+
+.bag:hover {
+  background-color: #fafafa;
+}
+
+.checkButton {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid #5ece7b;
+  background-color: #5ece7b;
+  box-sizing: border-box;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1rem;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.checkButton:hover {
+  border-color: #73d48c;
+  background-color: #73d48c;
+}

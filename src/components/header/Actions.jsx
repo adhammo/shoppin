@@ -1,15 +1,15 @@
 import React, { PureComponent } from 'react'
 
 import styles from 'styles/header/Actions.module.css'
-import Currency from 'components/overlays/Currency'
-import Cart from 'components/overlays/Cart'
+import Currency from 'components/header/Currency'
+import CartOverlay from 'components/cart/CartOverlay'
 
 class Actions extends PureComponent {
   render() {
     return (
       <div className={styles.actions}>
         <Currency />
-        <Cart />
+        <CartOverlay />
       </div>
     )
   }

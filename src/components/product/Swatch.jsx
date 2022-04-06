@@ -22,7 +22,12 @@ class Swatch extends PureComponent {
 
   render() {
     return (
-      <div className={styles.swatch}>
+      <div
+        className={classNames(styles.swatch, {
+          [styles.tiny]: this.props.tiny,
+          [styles.small]: this.props.small,
+        })}
+      >
         {this.props.reactive
           ? this.props.items.map(item => {
               const selected = this.isItemSelected(item)
@@ -31,7 +36,6 @@ class Swatch extends PureComponent {
                   key={item.id}
                   title={item.displayValue}
                   className={classNames(styles.value, styles.reactive, {
-                    [styles.small]: this.props.small,
                     [styles.dark]: !readableColorIsBlack(item.value),
                     [styles.selected]: selected,
                   })}
@@ -55,7 +59,6 @@ class Swatch extends PureComponent {
                   key={item.id}
                   title={item.displayValue}
                   className={classNames(styles.value, {
-                    [styles.small]: this.props.small,
                     [styles.dark]: !readableColorIsBlack(item.value),
                     [styles.selected]: selected,
                   })}
@@ -73,6 +76,7 @@ class Swatch extends PureComponent {
 }
 
 Swatch.propTypes = {
+  tiny: PropTypes.bool.isRequired,
   small: PropTypes.bool.isRequired,
   items: PropTypes.array.isRequired,
   selected: PropTypes.string.isRequired,

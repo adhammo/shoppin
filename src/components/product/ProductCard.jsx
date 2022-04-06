@@ -11,11 +11,10 @@ import CartIcon from 'icons/cart-light.svg'
 
 class ProductCard extends PureComponent {
   render() {
-    const price =
-      this.props.prices.find(
-        price => price.currency.label === this.props.currency.label
-      ) ?? this.props.prices[0]
-    const selected = !this.props.inStock
+    const price = this.props.prices.find(
+      price => price.currency.label === this.props.currency.label
+    )
+    const selected = this.props.inCart
     return (
       <Link
         className={classNames(styles.productCard, {
@@ -71,6 +70,7 @@ ProductCard.propTypes = {
   gallery: PropTypes.array.isRequired,
   brand: PropTypes.string.isRequired,
   prices: PropTypes.array.isRequired,
+  inCart: PropTypes.bool.isRequired,
 }
 
 export default connect(mapStateToProps)(ProductCard)

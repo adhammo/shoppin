@@ -15,17 +15,21 @@ class Cart extends PureComponent {
           <h1 className={styles.title}>CART</h1>
         </header>
         <section className={styles.cartProducts}>
-          {this.props.cartProducts.map(cartProduct => {
-            const product = this.props.products[cartProduct.id]
-            return cartProduct.options.map((option, index) => (
-              <CartProduct
-                key={`${cartProduct.id}_${index}`}
-                {...product}
-                option={option}
-                optionIndex={index}
-              />
-            ))
-          })}
+          {this.props.cartProducts.length > 0 ? (
+            this.props.cartProducts.map(cartProduct => {
+              const product = this.props.products[cartProduct.id]
+              return cartProduct.options.map((option, index) => (
+                <CartProduct
+                  key={`${cartProduct.id}_${index}`}
+                  {...product}
+                  option={option}
+                  optionIndex={index}
+                />
+              ))
+            })
+          ) : (
+            <p className={styles.empty}>Cart is empty, add some items.</p>
+          )}
         </section>
       </div>
     )

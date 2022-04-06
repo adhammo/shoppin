@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 
-import { getCartProducts } from 'redux/reducers/cartSlice'
+import { resolveStatus } from 'redux/status'
+import { getCartProductsArray } from 'redux/reducers/cartSlice'
 import { getProductsStatus } from 'redux/reducers/productsSlice'
 
 import Cart from 'components/cart/Cart'
@@ -10,19 +11,18 @@ import Error from 'components/status/Error'
 
 class CartPage extends PureComponent {
   render() {
-    if (this.props.status === 'succeeded') {
-      return <Cart cartProducts={this.props.cartProducts} />
-    } else if (this.props.status === 'failed') {
-      return <Error />
-    } else {
-      return <Loading />
-    }
+    return resolveStatus(
+      () => <Cart cartProducts={this.props.cartProducts} />,
+      () => <Error />,
+      () => <Loading />,
+      this.props.productsStatus
+    )
   }
 }
 
 const mapStateToProps = state => ({
-  status: getProductsStatus(state),
-  cartProducts: getCartProducts(state),
+  productsStatus: getProductsStatus(state),
+  cartProducts: getCartProductsArray(state),
 })
 
 export default connect(mapStateToProps)(CartPage)

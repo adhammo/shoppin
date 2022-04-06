@@ -2,7 +2,7 @@ import React, { Component, createRef } from 'react'
 import { connect } from 'react-redux'
 import classNames from 'classnames'
 
-import { hasFailed } from 'redux/status'
+import { hasSucceeded } from 'redux/status'
 import {
   currencySelected,
   getCurrenciesStatus,
@@ -11,7 +11,7 @@ import {
   isCurrencySelected,
 } from 'redux/reducers/currenciesSlice'
 
-import styles from 'styles/overlays/Currency.module.css'
+import styles from 'styles/header/Currency.module.css'
 import ArrowIcon from 'icons/arrow.svg'
 
 class Currency extends Component {
@@ -22,10 +22,18 @@ class Currency extends Component {
     this.overlayRef = createRef()
   }
 
-  componentWillUnmount() {
-    if (this.state.overlayShown) {
-      document.removeEventListener('mousedown', this.hasClickedOutside)
-    }
+  openOverlay = () => {
+    this.setState({ overlayShown: true })
+  }
+
+  closeOverlay = () => {
+    this.setState({ overlayShown: false })
+  }
+
+  toggleOverlay = e => {
+    e.preventDefault()
+    if (!this.state.overlayShown) this.openOverlay()
+    else this.closeOverlay()
   }
 
   hasClickedOutside = e => {
@@ -36,26 +44,28 @@ class Currency extends Component {
     if (!clickedInside) this.closeOverlay()
   }
 
-  openOverlay = () => {
-    this.setState({ overlayShown: true }, () => {
+  componentDidMount() {
+    if (this.state.overlayShown) {
       document.addEventListener('mousedown', this.hasClickedOutside)
-    })
+    }
   }
 
-  closeOverlay = () => {
-    this.setState({ overlayShown: false }, () => {
+  componentDidUpdate() {
+    if (this.state.overlayShown) {
+      document.addEventListener('mousedown', this.hasClickedOutside)
+    } else {
       document.removeEventListener('mousedown', this.hasClickedOutside)
-    })
+    }
   }
 
-  toggleOverlay = e => {
-    e.preventDefault()
-    if (!this.state.overlayShown) this.openOverlay()
-    else this.closeOverlay()
+  componentWillUnmount() {
+    if (this.state.overlayShown) {
+      document.removeEventListener('mousedown', this.hasClickedOutside)
+    }
   }
 
   render() {
-    if (hasFailed(this.props.status)) return <div></div>
+    if (!hasSucceeded(this.props.status)) return <div></div>
     return (
       <div className={styles.currency}>
         <button

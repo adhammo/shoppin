@@ -7,6 +7,7 @@ import {
   getCurrenciesStatus,
   fetchAllCurrencies,
 } from './redux/reducers/currenciesSlice'
+import { overlayChanged } from './redux/reducers/cartSlice'
 import {
   getCategoriesStatus,
   fetchAllCategories,
@@ -18,6 +19,7 @@ import {
 
 import './App.css'
 import Page from './layouts/Page'
+import HomePage from 'pages/HomePage'
 import CategoryPage from './pages/CategoryPage'
 import ProductPage from './pages/ProductPage'
 import CartPage from 'pages/CartPage'
@@ -25,6 +27,7 @@ import NotFoundPage from './pages/NotFoundPage'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     scroll.scrollToTop({
@@ -32,7 +35,8 @@ function ScrollToTop() {
       duration: scrollDistanceInPx => 0.6 * Math.abs(scrollDistanceInPx),
       delay: 50,
     })
-  }, [pathname])
+    dispatch(overlayChanged({ visible: false }))
+  }, [pathname, dispatch])
 
   return null
 }
@@ -66,7 +70,7 @@ function App() {
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Page />}>
-          <Route index element={<NotFoundPage />} />
+          <Route index element={<HomePage />} />
           <Route path="category/:categoryName" element={<CategoryPage />} />
           <Route path="product/:productId" element={<ProductPage />} />
           <Route path="cart" element={<CartPage />} />

@@ -16,9 +16,9 @@ class ProductPage extends PureComponent {
     return resolveStatus(
       () => {
         if (this.props.product) return <Product {...this.props.product} />
-        else return <Error />
+        else return <Error message="Product was not found!" />
       },
-      () => <Error />,
+      () => <Error message="Product failed to load!" />,
       () => <Loading />,
       this.props.currenciesStatus,
       this.props.productsStatus

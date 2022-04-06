@@ -12,6 +12,7 @@ class Loading extends PureComponent {
           <div></div>
           <div></div>
         </div>
+        <p className={styles.message}>Loading...</p>
       </div>
     )
   }

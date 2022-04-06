@@ -10,6 +10,7 @@ class Attribute extends PureComponent {
       case 'text':
         return (
           <Text
+            tiny={this.props.tiny}
             small={this.props.small}
             items={this.props.items}
             selected={this.props.selected}
@@ -20,6 +21,7 @@ class Attribute extends PureComponent {
       case 'swatch':
         return (
           <Swatch
+            tiny={this.props.tiny}
             small={this.props.small}
             items={this.props.items}
             selected={this.props.selected}
@@ -34,6 +36,7 @@ class Attribute extends PureComponent {
 }
 
 Attribute.propTypes = {
+  tiny: PropTypes.bool.isRequired,
   small: PropTypes.bool.isRequired,
   type: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
@@ -48,6 +51,7 @@ Attribute.propTypes = {
 
 Attribute.defaultProps = {
   small: false,
+  tiny: false,
   reactive: false,
 }
 

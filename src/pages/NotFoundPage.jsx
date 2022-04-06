@@ -1,7 +1,9 @@
 import React from 'react'
 
+import Error from 'components/status/Error'
+
 function NotFoundPage() {
-  return <div>NotFoundPage</div>
+  return <Error message="Page was not found!" />
 }
 
 export default NotFoundPage

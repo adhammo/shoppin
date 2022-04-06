@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   products: {},
+  overlayVisible: false,
 }
 
 const isExactOption = (option, attributes) => {
@@ -42,17 +43,24 @@ const cartSlice = createSlice({
         } else state.products[id].splice(index, 1)
       }
     },
+    overlayChanged(state, action) {
+      state.overlayVisible = action.payload.visible
+    },
   },
 })
 
-export const { productAdded, productChanged, productRemoved } =
+export const { productAdded, productChanged, productRemoved, overlayChanged } =
   cartSlice.actions
 
 export default cartSlice.reducer
 
-export const getCartProducts = state => {
+export const getCartProducts = state => state.cart.products
+
+export const getCartProductsArray = state => {
   return Object.entries(state.cart.products).map(([id, options]) => ({
     id,
     options,
   }))
 }
+
+export const isOverlayVisible = state => state.cart.overlayVisible

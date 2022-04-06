@@ -36,12 +36,6 @@ const categoriesSlice = createSlice({
   },
 })
 
-// categoryAdded(state, action) {
-//   state.data.push(action.payload)
-// },
-
-// export const { categoryAdded } = categoriesSlice.actions
-
 export default categoriesSlice.reducer
 
 export const getCategoriesStatus = state => state.categories.status

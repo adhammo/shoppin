@@ -20,9 +20,9 @@ class CategoryPage extends PureComponent {
     return resolveStatus(
       () => {
         if (this.props.category) return <Category {...this.props.category} />
-        else return <Error />
+        else return <Error message="Category was not found!" />
       },
-      () => <Error />,
+      () => <Error message="Category failed to load!" />,
       () => <Loading />,
       this.props.currenciesStatus,
       this.props.categoriesStatus,

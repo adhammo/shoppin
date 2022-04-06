@@ -1,4 +1,5 @@
 .text {
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fill, 4rem);
   gap: 1rem;
@@ -20,14 +21,38 @@
   text-align: center;
 }
 
-.value.small {
+.value.selected {
+  opacity: 1;
+}
+
+.text.small {
+  gap: 0.5rem;
+}
+
+.text.small .value {
   padding: 0.2rem;
 }
 
-.value.selected {
+.text.tiny {
+  grid-template-columns: repeat(auto-fill, 2.5rem);
+  gap: 0.5rem;
+}
+
+.text.tiny .value {
+  border-radius: 0;
+  font-size: 0.6rem;
+  line-height: 0.8rem;
+  padding: 0.1rem;
+}
+
+.text:not(.small):not(.tiny) .value.selected {
   border: 2px solid transparent;
   outline: 2px solid #1d1f22;
-  opacity: 1;
+}
+
+.text.small .value.selected,
+.text.tiny .value.selected {
+  border: 2px solid #1d1f22;
 }
 
 .reactive {

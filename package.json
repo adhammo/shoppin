@@ -2,9 +2,9 @@
   "name": "shoppin",
   "description": "Shopping website made with React.js, and serves content through GraphQL",
   "keywords": [
-    "React.js",
-    "GraphQL",
-    "SPA"
+    "reactjs",
+    "graphql",
+    "spa"
   ],
   "version": "0.1.0",
   "private": true,

@@ -1,7 +1,20 @@
 {
   "name": "shoppin",
+  "description": "Shopping website made with React.js, and serves content through GraphQL",
+  "keywords": [
+    "React.js",
+    "GraphQL",
+    "SPA"
+  ],
   "version": "0.1.0",
   "private": true,
+  "author": {
+    "name": "Adham Mohamed",
+    "email": "adhamacc1@gmail.com"
+  },
+  "repository": {
+    "url": "https://github.com/adhammo/shoppin"
+  },
   "dependencies": {
     "@apollo/client": "^3.5.10",
     "@reduxjs/toolkit": "^1.8.0",

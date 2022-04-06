@@ -11,9 +11,6 @@ import ProductCard from 'components/product/ProductCard.jsx'
 
 class Category extends PureComponent {
   render() {
-    this.props.products.forEach(product => {
-      console.log(this.props.cartProducts[product.id])
-    })
     return (
       <div className={styles.category}>
         <header className={styles.header}>

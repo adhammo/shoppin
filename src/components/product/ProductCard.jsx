@@ -2,26 +2,33 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import classNames from 'classnames'
 
 import { getSelectedCurrency } from 'redux/reducers/currenciesSlice'
+import { productAdded } from 'redux/reducers/cartSlice'
 
 import styles from 'styles/product/ProductCard.module.css'
 import CartIcon from 'icons/cart-light.svg'
 
 class ProductCard extends PureComponent {
+  addToCart = () => {
+    this.props.addProduct(
+      this.props.id,
+      this.props.attributes.reduce(
+        (attributes, attribute) =>
+          attribute.items[0]
+            ? { ...attributes, [attribute.id]: attribute.items[0].id }
+            : attributes,
+        {}
+      )
+    )
+  }
+
   render() {
     const price = this.props.prices.find(
       price => price.currency.label === this.props.currency.label
     )
-    const selected = this.props.inCart
     return (
-      <Link
-        className={classNames(styles.productCard, {
-          [styles.selected]: selected,
-        })}
-        to={`/product/${this.props.id}`}
-      >
+      <Link className={styles.productCard} to={`/product/${this.props.id}`}>
         <section
           className={styles.imageContainer}
           title={this.props.name.concat(
@@ -38,10 +45,17 @@ class ProductCard extends PureComponent {
               <span className={styles.outStock}>OUT OF STOCK</span>
             </div>
           )}
-          {selected && (
-            <div className={styles.cartIcon} title="Check cart">
+          {this.props.inStock && (
+            <button
+              className={styles.cartButton}
+              title="Add to cart"
+              onClick={e => {
+                e.preventDefault()
+                this.addToCart()
+              }}
+            >
               <img className={styles.icon} src={CartIcon} alt="Cart Icon" />
-            </div>
+            </button>
           )}
         </section>
         <footer className={styles.content}>
@@ -63,14 +77,18 @@ const mapStateToProps = state => ({
   currency: getSelectedCurrency(state),
 })
 
+const mapDispatchToProps = dispatch => ({
+  addProduct: (id, attributes) => dispatch(productAdded({ id, attributes })),
+})
+
 ProductCard.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   inStock: PropTypes.bool.isRequired,
   gallery: PropTypes.array.isRequired,
   brand: PropTypes.string.isRequired,
+  attributes: PropTypes.array.isRequired,
   prices: PropTypes.array.isRequired,
-  inCart: PropTypes.bool.isRequired,
 }
 
-export default connect(mapStateToProps)(ProductCard)
+export default connect(mapStateToProps, mapDispatchToProps)(ProductCard)

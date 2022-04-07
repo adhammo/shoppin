@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import { getCartProducts } from 'redux/reducers/cartSlice'
 import { getProduct } from 'redux/reducers/productsSlice'
 import { capitalize } from 'util/stringOps'
 
@@ -18,11 +17,7 @@ class Category extends PureComponent {
         </header>
         <section className={styles.products}>
           {this.props.products.map(product => (
-            <ProductCard
-              key={product.id}
-              {...product}
-              inCart={Boolean(this.props.cartProducts[product.id])}
-            />
+            <ProductCard key={product.id} {...product} />
           ))}
         </section>
       </div>
@@ -31,7 +26,6 @@ class Category extends PureComponent {
 }
 
 const mapStateToProps = (state, props) => ({
-  cartProducts: getCartProducts(state),
   products: props.productsIds.map(productId => getProduct(state, productId)),
 })
 

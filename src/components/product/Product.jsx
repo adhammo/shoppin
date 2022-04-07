@@ -192,10 +192,10 @@ class Product extends Component {
                   className={styles.attributeTitle}
                 >{`${attribute.name.toUpperCase()}:`}</span>
                 <Attribute
+                  reactive
                   type={attribute.type}
                   items={attribute.items}
                   selected={this.getAttributeSelected(attribute.id)}
-                  reactive
                   selectItem={this.getAttributeSelectItem(attribute.id)}
                 />
               </div>

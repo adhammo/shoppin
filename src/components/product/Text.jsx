@@ -5,20 +5,6 @@ import classNames from 'classnames'
 import styles from 'styles/product/Text.module.css'
 
 class Text extends PureComponent {
-  componentDidMount() {
-    if (this.props.reactive && this.props.items[0]) {
-      this.selectItem(this.props.items[0])
-    }
-  }
-
-  isItemSelected = item => {
-    return this.props.selected === item.id
-  }
-
-  selectItem = item => {
-    if (this.props.reactive) this.props.selectItem(item.id)
-  }
-
   render() {
     return (
       <div
@@ -29,7 +15,7 @@ class Text extends PureComponent {
       >
         {this.props.reactive
           ? this.props.items.map(item => {
-              const selected = this.isItemSelected(item)
+              const selected = this.props.isItemSelected(item)
               return (
                 <button
                   key={item.id}
@@ -39,7 +25,7 @@ class Text extends PureComponent {
                   })}
                   onClick={e => {
                     e.preventDefault()
-                    this.selectItem(item)
+                    this.props.selectItem(item)
                   }}
                   disabled={selected}
                 >
@@ -48,7 +34,7 @@ class Text extends PureComponent {
               )
             })
           : this.props.items.map(item => {
-              const selected = this.isItemSelected(item)
+              const selected = this.props.isItemSelected(item)
               return (
                 <div
                   key={item.id}
@@ -67,10 +53,12 @@ class Text extends PureComponent {
 }
 
 Text.propTypes = {
+  tiny: PropTypes.bool.isRequired,
   small: PropTypes.bool.isRequired,
+  reactive: PropTypes.bool.isRequired,
   items: PropTypes.array.isRequired,
   selected: PropTypes.string.isRequired,
-  reactive: PropTypes.bool.isRequired,
+  isItemSelected: PropTypes.func.isRequired,
   selectItem: function (props, propName) {
     if (props.reactive && typeof props[propName] !== 'function') {
       return new Error('Please provide a selectItem function!')

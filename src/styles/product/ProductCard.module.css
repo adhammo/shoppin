@@ -10,7 +10,7 @@
   text-decoration: none;
 }
 
-.productCard.selected {
+.productCard:hover {
   box-shadow: 0px 4px 35px 0px #a8acb030;
 }
 
@@ -51,15 +51,26 @@
   color: #8d8f9a;
 }
 
-.cartIcon {
+.cartButton {
   position: absolute;
   right: 1rem;
   bottom: -1.5rem;
   padding: 0.8rem;
+  border: none;
   border-radius: 50%;
   background-color: #5ece7b;
-  user-select: none;
   box-shadow: 0 4px 11px #1d1f221a;
+  cursor: pointer;
+  user-select: none;
+  visibility: hidden;
+}
+
+.productCard:hover .cartButton {
+  visibility: visible;
+}
+
+.cartButton:hover {
+  background-color: #73d48c;
 }
 
 .icon {

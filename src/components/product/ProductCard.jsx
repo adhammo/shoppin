@@ -3,30 +3,27 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import { getSelectedCurrency } from 'redux/reducers/currenciesSlice'
+import { hasSucceeded } from 'redux/status'
+import {
+  getCurrenciesStatus,
+  getSelectedCurrency,
+} from 'redux/reducers/currenciesSlice'
 import { productAdded } from 'redux/reducers/cartSlice'
 
 import styles from 'styles/product/ProductCard.module.css'
 import CartIcon from 'icons/cart-light.svg'
 
 class ProductCard extends PureComponent {
-  addToCart = () => {
-    this.props.addProduct(
-      this.props.id,
-      this.props.attributes.reduce(
-        (attributes, attribute) =>
-          attribute.items[0]
-            ? { ...attributes, [attribute.id]: attribute.items[0].id }
-            : attributes,
-        {}
-      )
-    )
-  }
-
   render() {
-    const price = this.props.prices.find(
-      price => price.currency.label === this.props.currency.label
-    )
+    let priceText = ''
+    if (hasSucceeded(this.props.currenciesStatus)) {
+      const price = this.props.prices.find(
+        price => price.currency.label === this.props.selectedCurrency.label
+      )
+      priceText = `${price.currency.symbol}${
+        Math.round(price.amount * 100) / 100
+      }`
+    }
     return (
       <Link className={styles.productCard} to={`/product/${this.props.id}`}>
         <section
@@ -51,7 +48,7 @@ class ProductCard extends PureComponent {
               title="Add to cart"
               onClick={e => {
                 e.preventDefault()
-                this.addToCart()
+                this.props.addProductToCart()
               }}
             >
               <img className={styles.icon} src={CartIcon} alt="Cart Icon" />
@@ -64,9 +61,7 @@ class ProductCard extends PureComponent {
               {`${this.props.brand} ${this.props.name}`}
             </h3>
           </div>
-          <span className={styles.price}>
-            {`${price.currency.symbol}${Math.round(price.amount * 100) / 100}`}
-          </span>
+          <span className={styles.price}>{priceText}</span>
         </footer>
       </Link>
     )
@@ -74,11 +69,34 @@ class ProductCard extends PureComponent {
 }
 
 const mapStateToProps = state => ({
-  currency: getSelectedCurrency(state),
+  currenciesStatus: getCurrenciesStatus(state),
+  selectedCurrency: getSelectedCurrency(state),
 })
 
-const mapDispatchToProps = dispatch => ({
-  addProduct: (id, attributes) => dispatch(productAdded({ id, attributes })),
+const mapDispatchToProps = (dispatch, props) => ({
+  addProductToCart: () => {
+    return dispatch(
+      productAdded({
+        id: props.id,
+        product: {
+          id: props.id,
+          name: props.name,
+          gallery: props.gallery,
+          brand: props.brand,
+          attributes: props.attributes,
+          prices: props.prices,
+          category: props.category,
+        },
+        attributes: props.attributes.reduce(
+          (attributes, attribute) =>
+            attribute.items[0]
+              ? { ...attributes, [attribute.id]: attribute.items[0].id }
+              : attributes,
+          {}
+        ),
+      })
+    )
+  },
 })
 
 ProductCard.propTypes = {

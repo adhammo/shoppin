@@ -5,16 +5,21 @@ import classNames from 'classnames'
 
 import { hasSucceeded } from 'redux/status'
 import {
+  listCategories,
   getCategoriesStatus,
-  getAllCategories,
+  getCategories,
 } from 'redux/reducers/categoriesSlice'
 import { capitalize } from 'util/stringOps'
 
 import styles from 'styles/header/Navigation.module.css'
 
 class Navigation extends PureComponent {
+  componentDidMount() {
+    this.props.listCategories()
+  }
+
   render() {
-    if (!hasSucceeded(this.props.status)) return <nav></nav>
+    if (!hasSucceeded(this.props.categoriesStatus)) return <nav></nav>
     return (
       <nav className={styles.nav}>
         <ul className={styles.list}>
@@ -37,8 +42,12 @@ class Navigation extends PureComponent {
 }
 
 const mapStateToProps = state => ({
-  status: getCategoriesStatus(state),
-  categories: getAllCategories(state),
+  categoriesStatus: getCategoriesStatus(state),
+  categories: getCategories(state),
 })
 
-export default connect(mapStateToProps)(Navigation)
+const mapDispatchToProps = dispatch => ({
+  listCategories: () => dispatch(listCategories()),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navigation)

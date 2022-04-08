@@ -1,20 +1,22 @@
 import React, { PureComponent, createRef } from 'react'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import classNames from 'classnames'
 
 import { hasSucceeded } from 'redux/status'
 import {
-  getCartProductsArray,
-  isOverlayVisible,
+  getCurrenciesStatus,
+  getSelectedCurrency,
+} from 'redux/reducers/currenciesSlice'
+import {
   overlayChanged,
+  isOverlayVisible,
+  getCartProductsArray,
 } from 'redux/reducers/cartSlice'
-import { getSelectedCurrency } from 'redux/reducers/currenciesSlice'
-import { getProductsStatus, getProduct } from 'redux/reducers/productsSlice'
 
 import styles from 'styles/cart/CartOverlay.module.css'
 import CartProductTiny from 'components/product/CartProductTiny'
 import CartIcon from 'icons/cart.svg'
-import { Link } from 'react-router-dom'
 
 class CartOverlay extends PureComponent {
   constructor(props) {
@@ -65,26 +67,31 @@ class CartOverlay extends PureComponent {
   }
 
   render() {
-    if (!hasSucceeded(this.props.status)) return <div></div>
     const count = this.props.cartProducts.reduce((count, cartProduct) => {
       return (
         count +
         cartProduct.options.reduce((amount, option) => amount + option.count, 0)
       )
     }, 0)
-    const total = this.props.cartProducts.reduce((total, cartProduct) => {
-      const product = this.props.products[cartProduct.id]
-      const price = product.prices.find(
-        price => price.currency.label === this.props.currency.label
-      )
-      return (
-        total +
-        cartProduct.options.reduce(
-          (amount, option) => amount + price.amount * option.count,
-          0
+    let priceText = ''
+    if (hasSucceeded(this.props.currenciesStatus)) {
+      const total = this.props.cartProducts.reduce((total, cartProduct) => {
+        const product = cartProduct.product
+        const price = product.prices.find(
+          price => price.currency.label === this.props.selectedCurrency.label
         )
-      )
-    }, 0)
+        return (
+          total +
+          cartProduct.options.reduce(
+            (amount, option) => amount + price.amount * option.count,
+            0
+          )
+        )
+      }, 0)
+      priceText = `${this.props.selectedCurrency.symbol}${
+        Math.round(total * 100) / 100
+      }`
+    }
     return (
       <div className={styles.cart}>
         <button
@@ -111,7 +118,7 @@ class CartOverlay extends PureComponent {
             <section className={styles.cartProducts}>
               {this.props.cartProducts.length > 0 ? (
                 this.props.cartProducts.map(cartProduct => {
-                  const product = this.props.products[cartProduct.id]
+                  const product = cartProduct.product
                   return cartProduct.options.map((option, index) => (
                     <CartProductTiny
                       key={`${cartProduct.id}_${index}`}
@@ -128,11 +135,7 @@ class CartOverlay extends PureComponent {
             <footer className={styles.footer}>
               <div className={styles.totalContainer}>
                 <span className={styles.totalHeader}>Total</span>
-                <span className={styles.total}>
-                  {`${this.props.currency.symbol}${
-                    Math.round(total * 100) / 100
-                  }`}
-                </span>
+                <span className={styles.total}>{priceText}</span>
               </div>
               <div className={styles.buttons}>
                 <Link className={styles.bag} to="/cart">
@@ -157,17 +160,10 @@ class CartOverlay extends PureComponent {
 }
 
 const mapStateToProps = state => ({
-  status: getProductsStatus(state),
   overlayVisible: isOverlayVisible(state),
-  currency: getSelectedCurrency(state),
+  currenciesStatus: getCurrenciesStatus(state),
+  selectedCurrency: getSelectedCurrency(state),
   cartProducts: getCartProductsArray(state),
-  products: getCartProductsArray(state).reduce(
-    (products, cartProduct) => ({
-      ...products,
-      [cartProduct.id]: getProduct(state, cartProduct.id),
-    }),
-    {}
-  ),
 })
 
 const mapDispatchToProps = dispatch => ({

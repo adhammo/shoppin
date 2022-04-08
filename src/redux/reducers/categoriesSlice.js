@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-import { listCategories } from 'apollo/apis/categoriesAPI'
+import { fetchCategories } from 'apollo/apis/categoryAPI'
 
 const initialState = {
   data: [],
@@ -8,9 +8,9 @@ const initialState = {
   error: null,
 }
 
-export const fetchAllCategories = createAsyncThunk(
-  'categories/fetchAllCategories',
-  async () => await listCategories()
+export const listCategories = createAsyncThunk(
+  'categories/listCategories',
+  async () => await fetchCategories()
 )
 
 const categoriesSlice = createSlice({
@@ -18,18 +18,16 @@ const categoriesSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers(builder) {
-    // fetchAllCategories
+    // listCategories
     builder
-      .addCase(fetchAllCategories.pending, (state, action) => {
+      .addCase(listCategories.pending, (state, action) => {
         state.status = 'loading'
       })
-      .addCase(fetchAllCategories.fulfilled, (state, action) => {
+      .addCase(listCategories.fulfilled, (state, action) => {
         state.status = 'succeeded'
-        if (action.payload) {
-          state.data = state.data.concat(action.payload)
-        }
+        if (action.payload) state.data = action.payload
       })
-      .addCase(fetchAllCategories.rejected, (state, action) => {
+      .addCase(listCategories.rejected, (state, action) => {
         state.status = 'failed'
         state.error = action.error.message
       })
@@ -40,8 +38,4 @@ export default categoriesSlice.reducer
 
 export const getCategoriesStatus = state => state.categories.status
 
-export const getAllCategories = state => state.categories.data
-
-export const getCategory = (state, categoryName) => {
-  return state.categories.data.find(category => category.name === categoryName)
-}
+export const getCategories = state => state.categories.data

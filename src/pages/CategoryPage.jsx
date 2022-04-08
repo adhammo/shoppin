@@ -4,18 +4,27 @@ import { connect } from 'react-redux'
 
 import route from 'router/route'
 import { resolveStatus } from 'redux/status'
-import { getCurrenciesStatus } from 'redux/reducers/currenciesSlice'
 import {
-  getCategoriesStatus,
+  loadCategory,
+  getCategoryStatus,
   getCategory,
-} from 'redux/reducers/categoriesSlice'
-import { getProductsStatus } from 'redux/reducers/productsSlice'
+} from 'redux/reducers/categorySlice'
 
 import Category from 'components/category/Category'
 import Loading from 'components/status/Loading'
 import Error from 'components/status/Error'
 
 class CategoryPage extends PureComponent {
+  componentDidMount() {
+    this.props.loadCategory()
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.categoryName !== prevProps.categoryName) {
+      this.props.loadCategory()
+    }
+  }
+
   render() {
     return resolveStatus(
       () => {
@@ -24,25 +33,25 @@ class CategoryPage extends PureComponent {
       },
       () => <Error message="Category failed to load!" />,
       () => <Loading />,
-      this.props.currenciesStatus,
-      this.props.categoriesStatus,
-      this.props.productsStatus
+      this.props.categoryStatus
     )
   }
 }
 
 const mapParamsToProps = params => ({
-  name: params.categoryName,
+  categoryName: params.categoryName,
 })
 
 const mapStateToProps = (state, props) => ({
-  currenciesStatus: getCurrenciesStatus(state),
-  categoriesStatus: getCategoriesStatus(state),
-  productsStatus: getProductsStatus(state),
-  category: getCategory(state, props.name),
+  categoryStatus: getCategoryStatus(state),
+  category: getCategory(state, props.categoryName),
+})
+
+const mapDispatchToProps = (dispatch, props) => ({
+  loadCategory: () => dispatch(loadCategory(props.categoryName)),
 })
 
 export default compose(
   route(mapParamsToProps),
-  connect(mapStateToProps)
+  connect(mapStateToProps, mapDispatchToProps)
 )(CategoryPage)

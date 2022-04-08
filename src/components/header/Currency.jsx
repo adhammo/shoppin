@@ -4,9 +4,10 @@ import classNames from 'classnames'
 
 import { hasSucceeded } from 'redux/status'
 import {
+  listCurrencies,
   currencySelected,
   getCurrenciesStatus,
-  getAllCurrencies,
+  getCurrencies,
   getSelectedCurrency,
   isCurrencySelected,
 } from 'redux/reducers/currenciesSlice'
@@ -45,6 +46,7 @@ class Currency extends Component {
   }
 
   componentDidMount() {
+    this.props.listCurrencies()
     if (this.state.overlayShown) {
       document.addEventListener('mousedown', this.hasClickedOutside)
     }
@@ -65,7 +67,7 @@ class Currency extends Component {
   }
 
   render() {
-    if (!hasSucceeded(this.props.status)) return <div></div>
+    if (!hasSucceeded(this.props.currenciesStatus)) return <div></div>
     return (
       <div className={styles.currency}>
         <button
@@ -76,14 +78,16 @@ class Currency extends Component {
           onClick={this.toggleOverlay}
           title="Currency"
         >
-          <span className={styles.symbol}>{this.props.selected?.symbol}</span>
+          <span className={styles.symbol}>
+            {this.props.selectedCurrency?.symbol}
+          </span>
           <img className={styles.arrow} src={ArrowIcon} alt="Arrow Icon" />
         </button>
         {this.state.overlayShown && (
           <div ref={this.overlayRef} className={styles.overlay}>
             <div className={styles.choices}>
               {this.props.currencies.map(currency => {
-                const selected = this.props.isSelected(currency)
+                const selected = this.props.isCurrencySelected(currency)
                 return (
                   <button
                     key={currency.label}
@@ -110,13 +114,14 @@ class Currency extends Component {
 }
 
 const mapStateToProps = state => ({
-  status: getCurrenciesStatus(state),
-  currencies: getAllCurrencies(state),
-  selected: getSelectedCurrency(state),
-  isSelected: currency => isCurrencySelected(state, currency),
+  currenciesStatus: getCurrenciesStatus(state),
+  currencies: getCurrencies(state),
+  selectedCurrency: getSelectedCurrency(state),
+  isCurrencySelected: currency => isCurrencySelected(state, currency),
 })
 
 const mapDispatchToProps = dispatch => ({
+  listCurrencies: () => dispatch(listCurrencies()),
   selectCurrency: currency => dispatch(currencySelected(currency)),
 })
 

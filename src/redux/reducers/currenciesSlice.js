@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-import { listCurrencies } from 'apollo/apis/currenciesAPI'
+import { fetchCurrencies } from 'apollo/apis/currencyAPI'
 
 const initialState = {
   data: [],
@@ -9,40 +9,33 @@ const initialState = {
   error: null,
 }
 
-export const fetchAllCurrencies = createAsyncThunk(
-  'currencies/fetchAllCurrencies',
-  async () => await listCurrencies()
+export const listCurrencies = createAsyncThunk(
+  'currencies/listCurrencies',
+  async () => await fetchCurrencies()
 )
 
 const currenciesSlice = createSlice({
   name: 'currencies',
   initialState,
   reducers: {
-    currencySelected: {
-      reducer(state, action) {
-        if (action.payload) state.selected = action.payload
-      },
-      prepare(currency) {
-        return {
-          payload: currency.label,
-        }
-      },
+    currencySelected(state, action) {
+      if (action.payload) state.selected = action.payload.label
     },
   },
   extraReducers(builder) {
-    // fetchAllCurrencies
+    // listCurrencies
     builder
-      .addCase(fetchAllCurrencies.pending, (state, action) => {
+      .addCase(listCurrencies.pending, (state, action) => {
         state.status = 'loading'
       })
-      .addCase(fetchAllCurrencies.fulfilled, (state, action) => {
+      .addCase(listCurrencies.fulfilled, (state, action) => {
         state.status = 'succeeded'
         if (action.payload) {
-          state.data = state.data.concat(action.payload)
+          state.data = action.payload
           state.selected = action.payload[0]?.label ?? ''
         }
       })
-      .addCase(fetchAllCurrencies.rejected, (state, action) => {
+      .addCase(listCurrencies.rejected, (state, action) => {
         state.status = 'failed'
         state.error = action.error.message
       })
@@ -55,7 +48,7 @@ export default currenciesSlice.reducer
 
 export const getCurrenciesStatus = state => state.currencies.status
 
-export const getAllCurrencies = state => state.currencies.data
+export const getCurrencies = state => state.currencies.data
 
 export const isCurrencySelected = (state, currency) => {
   return state.currencies.selected === currency.label

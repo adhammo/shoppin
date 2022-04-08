@@ -1,11 +1,11 @@
 import client from '../client'
 
-import { LIST_PRODUCTS, FETCH_PRODUCT } from 'graphql/queries'
+import { QUERY_PRODUCTS, QUERY_PRODUCT } from 'graphql/queries'
 
-export const listProducts = async () => {
+export const fetchProducts = async () => {
   const {
     data: { categories },
-  } = await client.query({ query: LIST_PRODUCTS })
+  } = await client.query({ query: QUERY_PRODUCTS })
   return Object.values(
     categories?.reduce((products, category) => {
       category.products.forEach(product => {
@@ -20,8 +20,8 @@ export const fetchProduct = async productId => {
   const {
     data: { product },
   } = await client.query({
-    query: FETCH_PRODUCT,
-    variables: { productId },
+    query: QUERY_PRODUCT,
+    variables: { id: productId },
   })
   return product
 }

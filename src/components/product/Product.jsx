@@ -1,10 +1,15 @@
 import React, { Component, createRef } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import parse from 'html-react-parser'
 import { sanitize } from 'dompurify'
 import classNames from 'classnames'
 
-import { getSelectedCurrency } from 'redux/reducers/currenciesSlice'
+import { hasSucceeded } from 'redux/status'
+import {
+  getCurrenciesStatus,
+  getSelectedCurrency,
+} from 'redux/reducers/currenciesSlice'
 import { productAdded } from 'redux/reducers/cartSlice'
 import { capitalize } from 'util/stringOps'
 
@@ -109,9 +114,15 @@ class Product extends Component {
   }
 
   render() {
-    const price = this.props.prices.find(
-      price => price.currency.label === this.props.currency.label
-    )
+    let priceText = ''
+    if (hasSucceeded(this.props.currenciesStatus)) {
+      const price = this.props.prices.find(
+        price => price.currency.label === this.props.selectedCurrency.label
+      )
+      priceText = `${price.currency.symbol}${
+        Math.round(price.amount * 100) / 100
+      }`
+    }
     const selectedImage = this.props.gallery[this.state.selectedImage]
     return (
       <div className={styles.product}>
@@ -202,11 +213,7 @@ class Product extends Component {
             ))}
             <div className={styles.attribute}>
               <span className={styles.attributeTitle}>PRICE:</span>
-              <span className={styles.price}>
-                {`${price.currency.symbol}${
-                  Math.round(price.amount * 100) / 100
-                }`}
-              </span>
+              <span className={styles.price}>{priceText}</span>
             </div>
           </div>
           <button
@@ -215,18 +222,15 @@ class Product extends Component {
             })}
             onClick={e => {
               e.preventDefault()
-              this.props.addProduct(this.props.id, this.state.attributes)
+              this.props.addProductToCart(this.state.attributes)
             }}
             disabled={!this.props.inStock}
           >
             {this.props.inStock ? 'ADD TO CART' : 'OUT OF STOCK'}
           </button>
-          <div
-            className={styles.description}
-            dangerouslySetInnerHTML={{
-              __html: sanitize(this.props.description),
-            }}
-          ></div>
+          <div className={styles.description}>
+            {parse(sanitize(this.props.description))}
+          </div>
         </section>
       </div>
     )
@@ -234,14 +238,32 @@ class Product extends Component {
 }
 
 const mapStateToProps = state => ({
-  currency: getSelectedCurrency(state),
+  currenciesStatus: getCurrenciesStatus(state),
+  selectedCurrency: getSelectedCurrency(state),
 })
 
-const mapDispatchToProps = dispatch => ({
-  addProduct: (id, attributes) => dispatch(productAdded({ id, attributes })),
+const mapDispatchToProps = (dispatch, props) => ({
+  addProductToCart: attributes => {
+    return dispatch(
+      productAdded({
+        id: props.id,
+        product: {
+          id: props.id,
+          name: props.name,
+          gallery: props.gallery,
+          brand: props.brand,
+          attributes: props.attributes,
+          prices: props.prices,
+          category: props.category,
+        },
+        attributes,
+      })
+    )
+  },
 })
 
 Product.propTypes = {
+  id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   inStock: PropTypes.bool.isRequired,

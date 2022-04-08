@@ -1,8 +1,6 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 
-import { getProduct } from 'redux/reducers/productsSlice'
 import { capitalize } from 'util/stringOps'
 
 import styles from 'styles/category/Category.module.css'
@@ -25,13 +23,9 @@ class Category extends PureComponent {
   }
 }
 
-const mapStateToProps = (state, props) => ({
-  products: props.productsIds.map(productId => getProduct(state, productId)),
-})
-
 Category.propTypes = {
   name: PropTypes.string.isRequired,
   products: PropTypes.array.isRequired,
 }
 
-export default connect(mapStateToProps)(Category)
+export default Category

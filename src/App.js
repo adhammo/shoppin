@@ -6,7 +6,6 @@ import client from './apollo/client'
 import store from './redux/store'
 
 import './App.css'
-import FetchAtStart from 'components/effects/FetchAtStart'
 import ScrollToTop from 'components/effects/ScrollToTop'
 import Page from './layouts/Page'
 import HomePage from 'pages/HomePage'
@@ -19,7 +18,6 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <Provider store={store}>
-        <FetchAtStart />
         <BrowserRouter>
           <ScrollToTop />
           <Routes>

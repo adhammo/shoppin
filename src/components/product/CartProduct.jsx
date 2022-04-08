@@ -3,7 +3,11 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import classNames from 'classnames'
 
-import { getSelectedCurrency } from 'redux/reducers/currenciesSlice'
+import { hasSucceeded } from 'redux/status'
+import {
+  getCurrenciesStatus,
+  getSelectedCurrency,
+} from 'redux/reducers/currenciesSlice'
 import { productChanged, productRemoved } from 'redux/reducers/cartSlice'
 import { capitalize } from 'util/stringOps'
 
@@ -59,10 +63,15 @@ class CartProduct extends PureComponent {
   }
 
   render() {
-    const price = this.props.prices.find(
-      price => price.currency.label === this.props.currency.label
-    )
-    const total = price.amount * this.props.option.count
+    let priceText = ''
+    if (hasSucceeded(this.props.currenciesStatus)) {
+      const price = this.props.prices.find(
+        price => price.currency.label === this.props.selectedCurrency.label
+      )
+      priceText = `${price.currency.symbol}${
+        Math.round(price.amount * this.props.option.count * 100) / 100
+      }`
+    }
     const selectedImage = this.props.gallery[this.state.selectedImage]
     const prevDisabled = this.isImageFirst()
     const nextDisabled = this.isImageLast()
@@ -142,9 +151,7 @@ class CartProduct extends PureComponent {
         <section className={styles.attributes}>
           <div className={styles.attribute}>
             <span className={styles.attributeTitle}>TOTAL:</span>
-            <span className={styles.price}>
-              {`${price.currency.symbol}${Math.round(total * 100) / 100}`}
-            </span>
+            <span className={styles.price}>{priceText}</span>
           </div>
           {this.props.attributes.map(attribute => (
             <div key={attribute.id} className={styles.attribute}>
@@ -176,12 +183,14 @@ class CartProduct extends PureComponent {
 }
 
 const mapStateToProps = state => ({
-  currency: getSelectedCurrency(state),
+  currenciesStatus: getCurrenciesStatus(state),
+  selectedCurrency: getSelectedCurrency(state),
 })
 
 const mapDispatchToProps = dispatch => ({
-  changeProduct: (id, index, count) =>
-    dispatch(productChanged({ id, index, count })),
+  changeProduct: (id, index, count) => {
+   return dispatch(productChanged({ id, index, count }))
+  },
   removeProduct: (id, index) => dispatch(productRemoved({ id, index })),
 })
 
@@ -190,6 +199,7 @@ CartProduct.propTypes = {
   name: PropTypes.string.isRequired,
   gallery: PropTypes.array.isRequired,
   brand: PropTypes.string.isRequired,
+  attributes: PropTypes.array.isRequired,
   prices: PropTypes.array.isRequired,
   option: PropTypes.object.isRequired,
   optionIndex: PropTypes.number.isRequired,

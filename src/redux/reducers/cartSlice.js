@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  products: {},
+  cartProducts: {},
   overlayVisible: false,
 }
 
@@ -14,33 +14,43 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     productAdded(state, action) {
-      const { id, attributes } = action.payload
+      const { product, attributes } = action.payload
+      const id = product.id
       const newOption = {
         ...attributes,
         count: 1,
       }
-      if (state.products[id]) {
-        const index = state.products[id].findIndex(option =>
+      if (state.cartProducts[id]) {
+        const index = state.cartProducts[id].options.findIndex(option =>
           isExactOption(option, attributes)
         )
-        if (index !== -1) state.products[id][index].count++
-        else state.products[id] = state.products[id].concat(newOption)
-      } else state.products[id] = [newOption]
+        if (index !== -1) {
+          state.cartProducts[id].options[index].count++
+        } else {
+          state.cartProducts[id].options =
+            state.cartProducts[id].options.concat(newOption)
+        }
+      } else {
+        state.cartProducts[id] = { product, options: [newOption] }
+      }
     },
     productChanged(state, action) {
       const { id, index, count } = action.payload
-      const option = state.products[id]?.[index]
+      const option = state.cartProducts[id]?.options[index]
       if (option) {
-        state.products[id][index].count = Math.max(0, option.count + count)
+        state.cartProducts[id].options[index].count = Math.max(
+          0,
+          option.count + count
+        )
       }
     },
     productRemoved(state, action) {
       const { id, index } = action.payload
-      const option = state.products[id]?.[index]
+      const option = state.cartProducts[id]?.options[index]
       if (option) {
-        if (Object.keys(state.products[id]).length === 1) {
-          delete state.products[id]
-        } else state.products[id].splice(index, 1)
+        if (Object.keys(state.cartProducts[id].options).length === 1) {
+          delete state.cartProducts[id]
+        } else state.cartProducts[id].options.splice(index, 1)
       }
     },
     overlayChanged(state, action) {
@@ -54,12 +64,12 @@ export const { productAdded, productChanged, productRemoved, overlayChanged } =
 
 export default cartSlice.reducer
 
-export const getCartProducts = state => state.cart.products
+export const getCartProducts = state => state.cart.cartProducts
 
 export const getCartProductsArray = state => {
-  return Object.entries(state.cart.products).map(([id, options]) => ({
+  return Object.entries(state.cart.cartProducts).map(([id, cartProduct]) => ({
     id,
-    options,
+    ...cartProduct,
   }))
 }
 

@@ -4,14 +4,27 @@ import { connect } from 'react-redux'
 
 import route from 'router/route'
 import { resolveStatus } from 'redux/status'
-import { getCurrenciesStatus } from 'redux/reducers/currenciesSlice'
-import { getProduct, getProductsStatus } from 'redux/reducers/productsSlice'
+import {
+  loadProduct,
+  getProductStatus,
+  getProduct,
+} from 'redux/reducers/productSlice'
 
 import Product from 'components/product/Product'
 import Loading from 'components/status/Loading'
 import Error from 'components/status/Error'
 
 class ProductPage extends PureComponent {
+  componentDidMount() {
+    this.props.loadProduct()
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.productId !== prevProps.productId) {
+      this.props.loadProduct()
+    }
+  }
+
   render() {
     return resolveStatus(
       () => {
@@ -20,23 +33,25 @@ class ProductPage extends PureComponent {
       },
       () => <Error message="Product failed to load!" />,
       () => <Loading />,
-      this.props.currenciesStatus,
-      this.props.productsStatus
+      this.props.productStatus
     )
   }
 }
 
 const mapParamsToProps = params => ({
-  id: params.productId,
+  productId: params.productId,
 })
 
 const mapStateToProps = (state, props) => ({
-  currenciesStatus: getCurrenciesStatus(state),
-  productsStatus: getProductsStatus(state),
-  product: getProduct(state, props.id),
+  productStatus: getProductStatus(state),
+  product: getProduct(state, props.productId),
+})
+
+const mapDispatchToProps = (dispatch, props) => ({
+  loadProduct: () => dispatch(loadProduct(props.productId)),
 })
 
 export default compose(
   route(mapParamsToProps),
-  connect(mapStateToProps)
+  connect(mapStateToProps, mapDispatchToProps)
 )(ProductPage)

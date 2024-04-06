@@ -4,7 +4,7 @@ const client = new ApolloClient({
   cache: new InMemoryCache({
     addTypename: false,
   }),
-  uri: 'https://junior-scandi-endpoint.herokuapp.com',
+  uri: 'https://deafening-egg-production.up.railway.app',
 })
 
 export default client
